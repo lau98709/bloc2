@@ -168,6 +168,8 @@ def Callback():
 
 # Création du labyrinthe
 lab = LabSolver(10,10)
+lab.sortie = [lab.width-1,lab.height-1]
+lab.draw_case_value=True
 
 def Solve():
     print("Recommencer")
@@ -175,6 +177,10 @@ def Solve():
     lab.Generate(Callback)
     lab.Solve(Callback)
 
+def Solve2():
+    print("Recommencer sans régénérer")
+    lab.Solve(Callback)
+    
 # Création de la fenêtre
 fenetre = Tk()
 fenetre.title("Labyrinthe")
@@ -182,6 +188,7 @@ fenetre.title("Labyrinthe")
 # Création d'un menu avec une commande pour recommencer
 menubar = Menu(fenetre)
 menubar.add_command(label="Recommencer", command=Solve)
+menubar.add_command(label="Recommencer sans régénérer", command=Solve2)
 fenetre.config(menu=menubar)
 
 # Création du "canvas" de la fenêtre
