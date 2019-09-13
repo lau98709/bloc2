@@ -20,6 +20,8 @@ class LabSolver(Labyrinthe):
     banned_color = "#404040"
 
     pos = [0,0]
+    
+    debug = 0
 
     def __init__(self, w, h):
         super().__init__(w, h)
@@ -102,6 +104,11 @@ class LabSolver(Labyrinthe):
                         if (d < mindist):
                             mindist = d
                             cmin = c2
+                            
+                    if (self.debug == 1):
+                        cmin = self.GetNextCase(self.pos[0], self.pos[1] ,s[0])
+                    elif (self.debug == 2):
+                        cmin = self.GetNextCase(self.pos[0], self.pos[1] ,s[random.randint(0,len(s)-1)])
 
                     # Mise à jour de la position
                     self.Case(self.pos[0], self.pos[1]).value = 1
@@ -152,7 +159,7 @@ class LabSolver(Labyrinthe):
                 if (callback() == 0): break
 
 
-def TestSolver():
+def TestSolver( debug = 0 ):
     # Fonction callback pour mettre à jour l'affichage
     # après chaque changement du labyrinthe
     def Callback():
@@ -171,6 +178,7 @@ def TestSolver():
     lab = LabSolver(10,10)
     lab.sortie = [lab.width-1,lab.height-1]
     lab.draw_case_value=True
+    lab.debug = debug
     
     def Solve():
         print("Recommencer")
