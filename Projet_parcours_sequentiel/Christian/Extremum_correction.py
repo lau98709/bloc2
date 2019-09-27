@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Sep 14 08:04:04 2019
+Created on Tue Sep 24 16:25:15 2019
 
 @author: LAU Wai Tong Christian
 
@@ -11,9 +11,9 @@ import math
 import time
 import random
 
-#------ Les variables globale ---------
+#------ Les variables globales ---------
 
-size = 300
+size = 100000
 data = None
 
 maximal = 0
@@ -25,8 +25,9 @@ index = 0
 bias = 0.8
 funct = None
 
-#---------------------------- ---------
+animated = False
 
+#--------------------------------------
 
 #  Affichage des données
 def DrawData( canvas, data ):
@@ -43,7 +44,7 @@ def DrawData( canvas, data ):
     size = 1
     for i in range(0,n):
         x = i * w / n;
-        y = h/2 + data[i]*h
+        y = h/2 - data[i]*h
         canvas.create_oval(x-size,y-size,x+size,y+size,width=2)
         if (i > 0): canvas.create_line(lx, ly, x, y, fill="blue")
         lx = x; ly = y
@@ -54,10 +55,10 @@ def DrawData( canvas, data ):
         canvas.create_line(x, 0, x, h, width=2, fill="red")
 
     # Dessin des points du maximum et du minimum    
-    x = i_max*w/n; y = h/2 + maximal*h; size = 5
-    canvas.create_oval(x-size,y-size,x+size,y+size,width=1,fill="#80FF80")
-    x = i_min*w/n; y = h/2 + minimal*h; size = 5
+    x = i_max*w/n; y = h/2 - maximal*h; size = 5
     canvas.create_oval(x-size,y-size,x+size,y+size,width=1,fill="#FF8080")
+    x = i_min*w/n; y = h/2 - minimal*h; size = 5
+    canvas.create_oval(x-size,y-size,x+size,y+size,width=1,fill="#80FF80")
 
 
 # Création des données
@@ -110,14 +111,15 @@ def Search():
     # Boucle de balayage de la liste
     for index in range(len(data)):
 
-        if (data[index] > maximal):
+        if (data[index] > maximal):     # Si nouveau max
             maximal = data[index]
             i_max = index
-        if (data[index] < minimal):
+            
+        if (data[index] < minimal):     # Si nouveau min
             minimal = data[index]
             i_min = index
-
-        ReDraw()    # Mise à jour graphique
+        
+        if animated: ReDraw()
 
 
 # Action déclencher par le menu "Recherche extremum"
@@ -129,24 +131,31 @@ def ActionMenu():
     Search()
 
 
-# Création de la fenêtre
-fenetre = Tk()
-fenetre.title("Recherche d'extremums")
+def Test():
+    global data, funct, canvas, fenetre
+    # Création de la fenêtre
+    fenetre = Tk()
+    fenetre.title("Recherche d'extremums")
+    
+    # Création d'un menu avec une commande pour remise à zéro
+    menubar = Menu(fenetre)
+    menubar.add_command(label="Recherche extremum", command=ActionMenu)
+    fenetre.config(menu=menubar)
+    
+    # Création du "canvas" de la fenêtre
+    canvas = Canvas(fenetre,width=600,height=480,background="white")
+    canvas.pack()
+    
+    # Génération des données
+    funct = SinusSinus
+    data = GenData(size)
+    
+    # Recherche des extremums
+    t0 = time.time()
+    Search()
+    print(str((time.time()-t0)*1000.0)+"ms")
+    ReDraw()    # Mise à jour graphique
+    
+    fenetre.mainloop()
 
-# Création d'un menu avec une commande pour remise à zéro
-menubar = Menu(fenetre)
-menubar.add_command(label="Recherche extremum", command=ActionMenu)
-fenetre.config(menu=menubar)
-
-# Création du "canvas" de la fenêtre
-canvas = Canvas(fenetre,width=600,height=480,background="white")
-canvas.pack()
-
-# Génération des données
-funct = SinusSinus
-data = GenData(size)
-
-# Recherche des extremums
-Search()
-
-fenetre.mainloop()
+Test()
