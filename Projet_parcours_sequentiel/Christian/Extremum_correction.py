@@ -13,7 +13,7 @@ import random
 
 #------ Les variables globales ---------
 
-size = 100000
+size = 300
 data = None
 
 maximal = 0
@@ -25,7 +25,7 @@ index = 0
 bias = 0.8
 funct = None
 
-animated = False
+animated = True
 
 #--------------------------------------
 
