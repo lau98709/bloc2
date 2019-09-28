@@ -109,7 +109,7 @@ def Search():
     minimal = data[0]
 
     # Boucle de balayage de la liste
-    for index in range(len(data)):
+    for index in range(1,len(data)):
 
         if (data[index] > maximal):     # Si nouveau max
             maximal = data[index]
